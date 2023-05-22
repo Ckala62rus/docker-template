@@ -20,7 +20,7 @@ services:
     image: nginx:1.21.1
     container_name: nginx-laravel
     ports:
-      - 80:80
+      - 85:80
     volumes:
       - ./docker/nginx/config/nginx.conf:/etc/nginx/nginx.conf
       - ./docker/nginx/config/conf.d/:/etc/nginx/conf.d
@@ -54,7 +54,7 @@ services:
     image: phpmyadmin
     restart: always
     ports:
-      - 8080:80
+      - 8085:80
     environment:
       - PMA_ARBITRARY=1
 
@@ -85,4 +85,12 @@ services:
     depends_on:
       - backend-laravel
       - mysql-laravel
- 
+
+  # https://github.com/aschmelyun/laravel-scheduled-tasks-docker
+  cron:
+    build:
+      context: .
+      dockerfile: cron.dockerfile
+    container_name: cron
+    volumes:
+      - ./backend/:/var/www
